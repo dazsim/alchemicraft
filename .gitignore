@@ -1,29 +1,38 @@
+# gradle
+.gradle/
+.kotlin/
+build/
+out/
+classes/
+
+# run dirs and logs
+run/
+runs/
+logs/
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
 # eclipse
-bin
+bin/
 *.launch
-.settings
+.settings/
 .metadata
 .classpath
 .project
+eclipse/
 
 # idea
-out
+.idea/
+*.iml
 *.ipr
 *.iws
-*.iml
-.idea/*
-!.idea/scopes
 
-# gradle
-build
-.gradle
+# vscode
+.vscode/
 
 # other
-eclipse
-run
-runs
 *.orig
 *.rej
-.vscode
 .DS_Store
-logs
