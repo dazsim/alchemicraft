@@ -20,8 +20,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 // a player holding the lens sees what they look at broken into elements on the action bar.
@@ -29,7 +29,7 @@ import java.util.UUID;
 public final class LensReadout {
     private static final double RANGE = 6.0;
     private static final int EVERY = 5;
-    private static final Map<UUID, String> SHOWN = new HashMap<>();
+    private static final Set<UUID> SHOWN = new HashSet<>();
 
     private LensReadout() {
     }
@@ -41,7 +41,6 @@ public final class LensReadout {
         MinecraftServer server = Mc.server(player);
         Component name = null;
         ElementMix mix = null;
-        String target = null;
 
         Vec3 eye = player.getEyePosition();
         HitResult blockHit = player.pick(RANGE, 1.0F, false);
@@ -54,28 +53,25 @@ public final class LensReadout {
             Entity entity = entityHit.getEntity();
             name = entity instanceof ItemEntity item ? item.getItem().getHoverName() : entity.getDisplayName();
             mix = ElementTable.entity(server, entity);
-            target = "e" + entity.getId();
         } else if (blockHit.getType() == HitResult.Type.BLOCK) {
             BlockPos pos = ((BlockHitResult) blockHit).getBlockPos();
             BlockState state = player.level().getBlockState(pos);
             name = state.getBlock().getName();
             mix = ElementTable.block(server, state);
-            target = "b" + pos.asLong() + state;
         } else {
             InteractionHand other = lens == player.getMainHandItem() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
             ItemStack held = player.getItemInHand(other);
             if (!held.isEmpty()) {
                 name = held.getHoverName();
                 mix = ElementTable.item(server, held);
-                target = "i" + held.getItem();
             }
         }
 
-        if (target == null) {
-            if (SHOWN.remove(player.getUUID()) != null) Mc.overlay(player, Component.empty());
+        if (name == null) {
+            if (SHOWN.remove(player.getUUID())) Mc.overlay(player, Component.empty());
             return;
         }
-        SHOWN.put(player.getUUID(), target);
+        SHOWN.add(player.getUUID());
         Mc.overlay(player, line(name, mix));
     }
 

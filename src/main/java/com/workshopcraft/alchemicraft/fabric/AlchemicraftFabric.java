@@ -18,11 +18,8 @@ public class AlchemicraftFabric implements ModInitializer {
         //? if >=1.21.11 {
         LootTableEvents.MODIFY.register((key, table, source, registries) -> {
             ArchaeologyLoot.Odds odds = source.isBuiltin() ? ArchaeologyLoot.odds(key.identifier()) : null;
-        //?} else if >=1.21.2 {
+        //?} else if >=1.20.5 {
         /*LootTableEvents.MODIFY.register((key, table, source, registries) -> {
-            ArchaeologyLoot.Odds odds = source.isBuiltin() ? ArchaeologyLoot.odds(key.location()) : null;
-        *///?} else if >=1.20.5 {
-        /*LootTableEvents.MODIFY.register((key, table, source) -> {
             ArchaeologyLoot.Odds odds = source.isBuiltin() ? ArchaeologyLoot.odds(key.location()) : null;
         *///?} else {
         /*LootTableEvents.MODIFY.register((resources, lootData, id, table, source) -> {

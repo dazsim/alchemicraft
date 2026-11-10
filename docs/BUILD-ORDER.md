@@ -9,6 +9,13 @@ A first pass at what to build, starting with the smallest playable slice. Later 
 - Element readout tooltip when looking at a block, item or mob with the lens.
 - A small element data table covering a handful of vanilla items, enough to prove the mix readout.
 
+Built so far:
+
+- Fragments come from brushing suspicious sand and gravel at desert wells and pyramids, trail ruins and ocean ruins, roughly 1 in 7 to 1 in 12 brushes. Fabric adds a weighted entry to the vanilla pool; NeoForge and Forge use a loot modifier at the same odds.
+- Using a fragment unlocks the lens recipe in the recipe book and uses up the fragment. If the recipe is already known the fragment stays. The recipe is 4 copper ingots around an amethyst shard. Like vanilla recipes, it still crafts for a player who has not unlocked it.
+- Holding the lens in either hand shows the elements of the looked-at mob, dropped item or block on the action bar. With nothing in sight it reads the item in the other hand. The server works this out, so it uses the server's data packs and needs no custom network code.
+- Element values are data: `data/<namespace>/alchemicraft/elements/*.json`, with `items`, `blocks` and `entities` sections. A block with no entry uses its item's entry. The vanilla values are drafts.
+
 ## M2: Mortar, salt and liquids
 
 - Mortar and pestle.
