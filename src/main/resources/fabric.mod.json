@@ -11,7 +11,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.workshopcraft.alchemicraft.AlchemicraftFabric"
+            "com.workshopcraft.alchemicraft.fabric.AlchemicraftFabric"
         ]
     },
     "depends": {

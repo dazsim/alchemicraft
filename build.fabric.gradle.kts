@@ -12,11 +12,19 @@ val requiredJava = when {
     else -> JavaVersion.VERSION_17
 }
 
+val era = when {
+    sc.current.parsed >= "26.1" -> "26.1"
+    sc.current.parsed >= "1.21" -> "1.21.1"
+    else -> "1.20.1"
+}
+sourceSets.main { resources.srcDir(rootProject.file("src/eras/$era")) }
+fun packProp(key: String) = runCatching { sc.properties.get<String>(key) }.getOrDefault("")
+
 dependencies {
     minecraft("com.mojang:minecraft:${sc.current.version}")
     loomx.applyMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-    modImplementation(fabricApi.module("fabric-api-base", sc.properties["deps.fabric_api"]))
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 }
 
 loom {
@@ -43,10 +51,13 @@ tasks {
             "description" to sc.properties.get<String>("mod.description"),
             "minecraft" to sc.properties.get<String>("mod.mc_compat"),
             "loader" to Regex("\\d+\\.\\d+").find(sc.properties.get<String>("deps.fabric_loader"))!!.value,
+            "pack_format" to packProp("mod.pack_format"),
+            "pack_min" to packProp("mod.pack_min"),
+            "pack_max" to packProp("mod.pack_max"),
         )
         inputs.properties(props)
-        filesMatching("fabric.mod.json") { expand(props) }
-        exclude("META-INF/neoforge.mods.toml", "META-INF/mods.toml", "pack.mcmeta")
+        filesMatching(listOf("fabric.mod.json", "pack.mcmeta")) { expand(props) }
+        exclude("META-INF/neoforge.mods.toml", "META-INF/mods.toml", "data/neoforge/**", "data/forge/**", "data/alchemicraft/loot_modifiers/**")
     }
 
     withType<Jar> {

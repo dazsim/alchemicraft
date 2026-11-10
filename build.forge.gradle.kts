@@ -7,6 +7,8 @@ version = "${property("mod.version")}+${sc.current.version}"
 group = property("mod.group") as String
 base.archivesName = "${property("mod.id")}-forge"
 
+sourceSets.main { resources.srcDir(rootProject.file("src/eras/1.20.1")) }
+
 legacyForge {
     version = property("deps.forge") as String
     mods {
@@ -46,7 +48,7 @@ tasks {
         )
         inputs.properties(props)
         filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta")) { expand(props) }
-        exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
+        exclude("fabric.mod.json", "META-INF/neoforge.mods.toml", "data/neoforge/**")
     }
 
     named("createMinecraftArtifacts") {

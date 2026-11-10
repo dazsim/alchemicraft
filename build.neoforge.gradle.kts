@@ -12,6 +12,14 @@ val requiredJava = when {
     else -> JavaVersion.VERSION_21
 }
 
+val era = when {
+    sc.current.parsed >= "26.1" -> "26.1"
+    sc.current.parsed >= "1.21" -> "1.21.1"
+    else -> "1.20.1"
+}
+sourceSets.main { resources.srcDir(rootProject.file("src/eras/$era")) }
+fun packProp(key: String) = runCatching { sc.properties.get<String>(key) }.getOrDefault("")
+
 neoForge {
     version = property("deps.neo_loader") as String
     mods {
@@ -47,10 +55,15 @@ tasks {
             "author" to sc.properties.get<String>("mod.author"),
             "description" to sc.properties.get<String>("mod.description"),
             "minecraft" to sc.properties.get<String>("mod.mc_compat"),
+            "pack_format" to packProp("mod.pack_format"),
+            "pack_min" to packProp("mod.pack_min"),
+            "pack_max" to packProp("mod.pack_max"),
         )
         inputs.properties(props)
-        filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
-        exclude("fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta")
+        filesMatching(listOf("META-INF/neoforge.mods.toml", "pack.mcmeta")) { expand(props) }
+        exclude("fabric.mod.json", "META-INF/mods.toml", "data/forge/**")
+        // NeoForge 26.x finds loot modifiers on its own; only 1.21.1 reads the list file
+        if (sc.current.parsed >= "26.1") exclude("data/neoforge/**")
     }
 
     named("createMinecraftArtifacts") {
