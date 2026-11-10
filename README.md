@@ -2,6 +2,8 @@
 
 A magic mod for Minecraft, built from one codebase for 1.20.1 (Forge, Fabric), 1.21.1 (NeoForge, Fabric) and 26.1.2, 26.2, 26.3 (NeoForge, Fabric). Still in design, nothing playable yet.
 
+See [DESIGN.md](docs/DESIGN.md) for the current design and [BUILD-ORDER.md](docs/BUILD-ORDER.md) for the first build list.
+
 ## Building
 
 The build uses [Stonecutter](https://stonecutter.kikugie.dev/) to produce every Minecraft version and loader from the same source. Version specific values are in `stonecutter.properties.toml`.
